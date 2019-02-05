@@ -26,4 +26,13 @@
 ;; key binding for indent-region-or-buffer
 (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 
+;; key binding for hippie expand
+(global-set-key (kbd "s-/") 'hippie-expand)
+
+;; key binding for dired
+(with-eval-after-load 'dired)
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(require 'dired-x)
+(setq dired-dwim-target t)
+
 (provide 'init-key-bindings)

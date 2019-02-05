@@ -16,6 +16,23 @@
 (recentf-mode t)
 (setq recentf-max-menu-items 25)
 
+;; hippie expand is dabbrev expand on steroids
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+					 try-expand-dabbrev-all-buffers
+					 try-expand-dabbrev-from-kill
+					 try-complete-file-name-partially
+					 try-complete-file-name
+					 try-expand-all-abbrevs
+					 try-expand-list
+					 try-expan-line
+					 try-complete-lisp-symbol-partially
+					 try-complete-lisp-symbol))
+
+;; configurations for dired
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
+(put 'dired-find-alternate-file 'disabled nil)
+
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
 
 (provide 'init-better-defaults)
