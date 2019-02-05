@@ -17,4 +17,13 @@
 ;; key binding for instantly opening emacs main configurations file
 (global-set-key (kbd "<f2>") 'open-init-file)
 
+;; key binding for finding git files
+(global-set-key (kbd "C-c p f") 'counsel-git)
+
+;; key binding for org mode
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+;; key binding for indent-region-or-buffer
+(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+
 (provide 'init-key-bindings)
