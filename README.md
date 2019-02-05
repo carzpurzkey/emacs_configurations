@@ -1,1 +1,1 @@
-# emacs_configurations
+My own configurations for emacs.
