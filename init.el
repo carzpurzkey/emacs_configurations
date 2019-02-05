@@ -1,134 +1,23 @@
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(when (>= emacs-major-version 24)
-     (require 'package)
-     (package-initialize)
-     (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-			      ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"))))
+(package-initialize)
 
-;; 注意 elpa.emacs-china.org 是 Emacs China 中文社区在国内搭建的一个 ELPA 镜像
+;; add custom configurations path to load path
+(add-to-list 'load-path "~/.emacs.d/inits")
 
- ;; cl - Common Lisp Extension
- (require 'cl)
-
- ;; Add Packages
- (defvar  carz/packages '(
-		;; --- Auto-completion ---
-		company
-		;; --- Better Editor ---
-		hungry-delete
-		swiper
-		counsel
-		smartparens
-		;; --- Major Mode ---
-		js2-mode
-		;; --- Minor Mode ---
-		nodejs-repl
-		exec-path-from-shell
-		;; --- Themes ---
-		monokai-theme
-		;; solarized-theme
-		) "Default packages")
-
- (setq package-selected-packages carz/packages)
-
- (defun carz/packages-installed-p ()
-     (loop for pkg in carz/packages
-	   when (not (package-installed-p pkg)) do (return nil)
-	   finally (return t)))
-
- (unless (carz/packages-installed-p)
-     (message "%s" "Refreshing package database...")
-     (package-refresh-contents)
-     (dolist (pkg carz/packages)
-       (when (not (package-installed-p pkg))
-	 (package-install pkg))))
-
- ;; Find Executable Path on OS X
- (when (memq window-system '(mac ns))
-   (exec-path-from-shell-initialize))
-
-(require 'org)
-(setq org-src-fontify-natively t)
-
-;; configurations for swiper
-(ivy-mode t)
-(setq ivy-use-virtual-buffers t)
-(global-set-key "\C-s" 'swiper)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "<f6>") 'ivy-resume)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-
-(require 'smartparens-config)
-(smartparens-global-mode t)
-
-
-(tool-bar-mode -1)
-
-(scroll-bar-mode -1)
-
-(delete-selection-mode t)
-
-(global-linum-mode t)
-
-(setq inhibit-spash-screen t)
-
-(set-face-attribute 'default nil :height 160)
-
+;; function for opening main configuration file
 (defun open-init-file()
     (interactive)
     (find-file "~/.emacs.d/init.el"))
 
-(global-set-key (kbd "<f2>") 'open-init-file)
+;; configurations for packages
+(require 'init-packages)
+;; configurations for ui
+(require 'init-ui)
+;; configurations for better defaults
+(require 'init-better-defaults)
+;; configurations for key bindings
+(require 'init-key-bindings)
+;; custom configurations
+(require 'init-custom)
 
-(global-company-mode t)
-
-(setq-default cursor-type 'bar)
-
-(setq make-backup-file nil)
-
-(require 'recentf)
-(recentf-mode t)
-(setq recentf-max-menu-items 25)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
-(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
-
-(global-hl-line-mode t)
-
-(load-theme 'monokai t)
-
-(require 'hungry-delete)
-(global-hungry-delete-mode)
-
-(setq auto-mode-alist
-      (append
-       ;; File name (within directory) starts with a dot.
-       '(("/\\.[^/]*\\'" . fundamental-mode)
-	  ;; File name has no dot.
-	  ("/[^\\./]*\\'" . fundamental-mode)
-	  ;; File name ends in '.C'.
-	  ("\\.C\\'" . c++-mode)
-	  ("\\.js\\'" . js2-mode)
-	  ("\\`/tmp/fol/" . text-mode)
-	  ("\\.texinfo\\'" . texinfo-mode)
-	  ("\\.texi\\'" . texinfo-mode)
-	  ("\\.el\\'" . emacs-lisp-mode)
-	  ("\\.c\\'" . c-mode)
-	  ("\\.h\\'" . c-mode))
-       auto-mode-alist))
-
-(setq auto-save-default nil)
-
-(set-default-font "-JF  -CamingoCode Nerd Font Mono-normal-normal-normal-*-20-*-*-*-*-0-iso10646-1")
-
-(custom-set-variables
- )
-
-(custom-set-faces
-)
+;; configuration for custom group
+(setq custom-file (expand-file-name "inits/init-custom.el" user-emacs-directory))

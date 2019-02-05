@@ -1,0 +1,89 @@
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(when (>= emacs-major-version 24)
+     (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+			      ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/"))))
+
+;; 注意 elpa.emacs-china.org 是 Emacs China 中文社区在国内搭建的一个 ELPA 镜像
+
+ ;; cl - Common Lisp Extension
+ (require 'cl)
+
+ ;; Add Packages
+ (defvar  carz/packages '(
+		;; --- Auto-completion ---
+		company
+		;; --- Better Editor ---
+		hungry-delete
+		swiper
+		counsel
+		smartparens
+		;; --- Major Mode ---
+		js2-mode
+		;; --- Minor Mode ---
+		nodejs-repl
+		exec-path-from-shell
+		;; --- Themes ---
+		monokai-theme
+		;; solarized-theme
+
+		popwin
+		) "Default packages")
+
+ (setq package-selected-packages carz/packages)
+
+ (defun carz/packages-installed-p ()
+     (loop for pkg in carz/packages
+	   when (not (package-installed-p pkg)) do (return nil)
+	   finally (return t)))
+
+ (unless (carz/packages-installed-p)
+     (message "%s" "Refreshing package database...")
+     (package-refresh-contents)
+     (dolist (pkg carz/packages)
+       (when (not (package-installed-p pkg))
+	 (package-install pkg))))
+
+ ;; Find Executable Path on OS X
+ (when (memq window-system '(mac ns))
+   (exec-path-from-shell-initialize))
+
+;; configurations for smartparens
+;; (require 'smartparens-config)
+(smartparens-global-mode t)
+
+;; configurations for swiper
+(ivy-mode t)
+(setq ivy-use-virtual-buffers t)
+
+;; configurations for hungry-delete
+(require 'hungry-delete)
+(global-hungry-delete-mode)
+
+;; configurations for company
+(global-company-mode t)
+
+;; configurations for popwin
+(require 'popwin)
+(popwin-mode t)
+
+(setq auto-mode-alist
+      (append
+       ;; File name (within directory) starts with a dot.
+       '(("/\\.[^/]*\\'" . fundamental-mode)
+	  ;; File name has no dot.
+	  ("/[^\\./]*\\'" . fundamental-mode)
+	  ;; File name ends in '.C'.
+	  ("\\.C\\'" . c++-mode)
+	  ("\\.js\\'" . js2-mode)
+	  ("\\`/tmp/fol/" . text-mode)
+	  ("\\.texinfo\\'" . texinfo-mode)
+	  ("\\.texi\\'" . texinfo-mode)
+	  ("\\.el\\'" . emacs-lisp-mode)
+	  ("\\.c\\'" . c-mode)
+	  ("\\.h\\'" . c-mode))
+       auto-mode-alist))
+
+(provide 'init-packages)
