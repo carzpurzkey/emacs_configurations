@@ -30,9 +30,12 @@
 (global-set-key (kbd "s-/") 'hippie-expand)
 
 ;; key binding for dired
-(with-eval-after-load 'dired)
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
 (require 'dired-x)
 (setq dired-dwim-target t)
+
+;; key binding for web-mode
+(global-set-key (kbd "C-c t i") 'my-toggle-web-indent)
 
 (provide 'init-key-bindings)

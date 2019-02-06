@@ -4,6 +4,9 @@
 (require 'org)
 (setq org-src-fontify-natively t)
 (setq org-agenda-files '("~/.emacs.d/org"))
+;;(require 'org-install)
+;;(require 'ob-tangle)
+;;(org-babel-load-file (expand-file-name "carzpurzkey.org" user-emacs-directory))
 
 ;; turn off auto backup file
 (setq make-backup-file nil)
@@ -34,5 +37,27 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+
+;; extend show-paren-function
+(define-advice show-paren-function (:around (fn) fix-show-paren-function)
+  "Highlight enclosing parens."
+  (cond ((looking-at-p "\\s(") (funcall fn))
+	(t (save-excursion
+	     (ignore-errors (backward-up-list))
+	     (funcall fn)))))
+  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+
+;; hide dos eol
+(defun hidden-dos-eol()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
+;; remove dos eol
+(defun remove-dos-eol()
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward "\r" nil t) (replace-match "")))
 
 (provide 'init-better-defaults)
